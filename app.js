@@ -21,15 +21,28 @@ let logs = [];
 // Initialize Camera
 async function initCamera() {
     try {
+        console.log('Initializing camera...');
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
         cameraStream.srcObject = stream;
+        console.log('Camera initialized successfully.');
     } catch (err) {
-        alert('Error accessing camera: ' + err);
+        console.error('Error accessing camera:', err);
+        alert('Error accessing camera: ' + err.message);
     }
 }
 
+// Call initCamera when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initCamera();
+});
+
 // Capture Photo
 function capturePhoto(docType) {
+    if (!cameraStream.srcObject) {
+        alert('Camera is not initialized.');
+        return;
+    }
+
     const canvas = document.createElement('canvas');
     canvas.width = cameraStream.videoWidth;
     canvas.height = cameraStream.videoHeight;
@@ -43,11 +56,18 @@ function capturePhoto(docType) {
 
 // Display Preview
 function displayPreview(docType, dataURL) {
+    // Remove existing preview for the same docType
+    const existingPreview = document.querySelector(`.preview[data-doc-type="${docType}"]`);
+    if (existingPreview) {
+        existingPreview.remove();
+    }
+
     const preview = document.createElement('div');
     preview.classList.add('preview');
     preview.setAttribute('data-doc-type', docType);
     const img = document.createElement('img');
     img.src = dataURL;
+    img.alt = `${docType} Preview`;
     preview.appendChild(img);
     previewsContainer.appendChild(preview);
 }
@@ -91,6 +111,7 @@ async function generatePDF() {
         if (dataURL) {
             doc.text(docType, 10, yOffset);
             yOffset += 5;
+            // Adjust image size as needed
             doc.addImage(dataURL, 'PNG', 10, yOffset, 180, 160);
             yOffset += 170;
             if(yOffset > 270){
@@ -112,7 +133,8 @@ async function generatePDF() {
         alert('PDF generated and uploaded successfully!');
         logAction(`Generated and uploaded PDF: ${pdfName}`);
     } catch (err) {
-        alert('Error uploading PDF: ' + err);
+        console.error('Error uploading PDF:', err);
+        alert('Error uploading PDF: ' + err.message);
     }
 }
 
@@ -125,8 +147,8 @@ function handleClientLoad() {
 
 function initClient() {
     gapi.client.init({
-        apiKey: 'AIzaSyB8COLiaLe28iI3fIywRPCjqvModBqw5Cg',
-        clientId: '284777244763-scvpc35rqbi5lo4mlfah63b389v3q8e0.apps.googleusercontent.com',
+        apiKey: 'YOUR_API_KEY',
+        clientId: 'YOUR_CLIENT_ID',
         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
         scope: 'https://www.googleapis.com/auth/drive.file'
     }).then(() => {
@@ -134,6 +156,9 @@ function initClient() {
         if (!GoogleAuth.isSignedIn.get()) {
             GoogleAuth.signIn();
         }
+    }).catch(err => {
+        console.error('Error initializing Google API client:', err);
+        alert('Error initializing Google API client: ' + err.message);
     });
 }
 
@@ -150,6 +175,7 @@ async function uploadToGoogleDrive(blob, fileName) {
                 let folderId;
                 if(response.result.files.length > 0){
                     folderId = response.result.files[0].id;
+                    uploadFile(folderId, base64Data, fileName).then(resolve).catch(reject);
                 } else {
                     // Create folder
                     gapi.client.drive.files.create({
@@ -161,13 +187,14 @@ async function uploadToGoogleDrive(blob, fileName) {
                     }).then(folderResponse => {
                         folderId = folderResponse.result.id;
                         uploadFile(folderId, base64Data, fileName).then(resolve).catch(reject);
-                    });
-                    return;
+                    }).catch(reject);
                 }
-                uploadFile(folderId, base64Data, fileName).then(resolve).catch(reject);
             }).catch(reject);
         };
-        reader.onerror = reject;
+        reader.onerror = (error) => {
+            console.error('Error reading blob:', error);
+            reject(error);
+        };
     });
 }
 
@@ -230,6 +257,9 @@ clearCacheButton.addEventListener('click', () => {
             }
             alert('Cache cleared!');
             logAction('Cache cleared');
+        }).catch(err => {
+            console.error('Error clearing cache:', err);
+            alert('Error clearing cache: ' + err.message);
         });
     }
 });
