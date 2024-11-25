@@ -1,0 +1,108 @@
+/* style.css */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav button {
+    margin-left: 10px;
+    padding: 0.5em 1em;
+    border: none;
+    background-color: white;
+    color: #4CAF50;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+main {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 120px); /* Adjust based on header and footer */
+}
+
+#camera-section {
+    position: relative;
+    flex: 1;
+}
+
+#camera-stream {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#capture-buttons {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+#capture-buttons button {
+    padding: 0.5em 1em;
+    border: none;
+    background-color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#previews-section {
+    margin-top: 1em;
+}
+
+#previews-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.preview {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+}
+
+.preview::after {
+    content: attr(data-doc-type);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    width: 100%;
+    text-align: center;
+    font-size: 0.8em;
+    padding: 2px 0;
+}
+
+#generate-pdf {
+    padding: 1em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 1em;
+}
