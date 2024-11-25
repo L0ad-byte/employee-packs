@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Employee Packs</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <h1>Employee Packs</h1>
+  
+  <div id="id-input-section">
+    <label for="id-number">ID Number:</label>
+    <input type="text" id="id-number" maxlength="13" placeholder="0000000000000">
+  </div>
+  
+  <div id="camera-section">
+    <video id="video" autoplay></video>
+    <canvas id="canvas" hidden></canvas>
+    <button id="capture-btn">Capture</button>
+  </div>
+  
+  <div id="document-options">
+    <button data-doc="KB">KB</button>
+    <button data-doc="SSO">SSO</button>
+    <button data-doc="HAZARD ID">HAZARD ID</button>
+    <button data-doc="ID FRONT">ID FRONT</button>
+    <button data-doc="ID BACK">ID BACK</button>
+  </div>
+  
+  <div id="previews">
+    <h2>Document Previews</h2>
+    <div id="preview-container"></div>
+  </div>
+  
+  <button id="generate-pdf">Generate PDF</button>
+  
+  <div id="menu">
+    <button id="clear-cache">Clear Cache</button>
+    <button id="view-logs">View Logs</button>
+  </div>
+  
+  <script src="main.js"></script>
+</body>
+</html>
