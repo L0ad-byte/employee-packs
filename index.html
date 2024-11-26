@@ -11,8 +11,8 @@
     <header>
         <h1>Employee Packs</h1>
         <nav>
-            <button id="clear-cache">Clear Cache</button>
-            <button id="view-logs">View Logs</button>
+            <button id="clear-cache" title="Clear Cache">&#x1F5D1;</button>
+            <button id="view-logs" title="View Logs">&#x1F4DD;</button>
         </nav>
     </header>
 
@@ -25,12 +25,13 @@
         <section id="camera-section">
             <video id="camera-stream" autoplay playsinline></video>
             <div id="capture-buttons">
-                <button data-doc-type="KB">KB</button>
-                <button data-doc-type="SSO">SSO</button>
-                <button data-doc-type="HAZARD ID">HAZARD ID</button>
-                <button data-doc-type="ID FRONT">ID FRONT</button>
-                <button data-doc-type="ID BACK">ID BACK</button>
+                <button class="doc-button" data-doc-type="KB">KB</button>
+                <button class="doc-button" data-doc-type="SSO">SSO</button>
+                <button class="doc-button" data-doc-type="HAZARD ID">HAZARD ID</button>
+                <button class="doc-button" data-doc-type="ID FRONT">ID FRONT</button>
+                <button class="doc-button" data-doc-type="ID BACK">ID BACK</button>
             </div>
+            <button id="capture-button" title="Capture">&#x25B6;</button>
         </section>
 
         <section id="previews-section">
@@ -45,7 +46,8 @@
         <p>&copy; 2024 Employee Packs</p>
     </footer>
 
-    <script src="lib/jspdf.umd.min.js"></script>
+    <!-- Include jsPDF via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
