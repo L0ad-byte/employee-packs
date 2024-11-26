@@ -8,15 +8,17 @@ if ('serviceWorker' in navigator) {
 }
 
 const cameraStream = document.getElementById('camera-stream');
-const captureButtons = document.querySelectorAll('#capture-buttons button');
+const captureButtons = document.querySelectorAll('.doc-button');
 const previewsContainer = document.getElementById('previews-container');
 const generatePdfButton = document.getElementById('generate-pdf');
 const idNumberInput = document.getElementById('id-number');
 const clearCacheButton = document.getElementById('clear-cache');
 const viewLogsButton = document.getElementById('view-logs');
+const captureButton = document.getElementById('capture-button');
 
 let capturedDocs = {};
 let logs = [];
+let selectedDocType = null;
 
 // Initialize Camera
 async function initCamera() {
@@ -36,10 +38,30 @@ document.addEventListener('DOMContentLoaded', () => {
     initCamera();
 });
 
+// Handle Document Type Selection
+captureButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Toggle active state
+        if (button.classList.contains('active')) {
+            button.classList.remove('active');
+            selectedDocType = null;
+        } else {
+            captureButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            selectedDocType = button.getAttribute('data-doc-type');
+        }
+    });
+});
+
 // Capture Photo
-function capturePhoto(docType) {
+function capturePhoto() {
     if (!cameraStream.srcObject) {
         alert('Camera is not initialized.');
+        return;
+    }
+
+    if (!selectedDocType) {
+        alert('Please select a document type before capturing.');
         return;
     }
 
@@ -49,9 +71,9 @@ function capturePhoto(docType) {
     const context = canvas.getContext('2d');
     context.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
     const dataURL = canvas.toDataURL('image/png');
-    capturedDocs[docType] = dataURL;
-    displayPreview(docType, dataURL);
-    logAction(`Captured ${docType}`);
+    capturedDocs[selectedDocType] = dataURL;
+    displayPreview(selectedDocType, dataURL);
+    logAction(`Captured ${selectedDocType}`);
 }
 
 // Display Preview
@@ -215,19 +237,19 @@ function uploadFile(folderId, base64Data, fileName) {
 function b64toBlob(b64Data, contentType='', sliceSize=512) {
     const byteCharacters = atob(b64Data);
     const byteArrays = [];
-  
+
     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
         const slice = byteCharacters.slice(offset, offset + sliceSize);
-  
+
         const byteNumbers = new Array(slice.length);
         for (let i = 0; i < slice.length; i++) {
             byteNumbers[i] = slice.charCodeAt(i);
         }
-  
+
         const byteArray = new Uint8Array(byteNumbers);
         byteArrays.push(byteArray);
     }
-  
+
     return new Blob(byteArrays, {type: contentType});
 }
 
@@ -239,13 +261,7 @@ script.onload = handleClientLoad;
 document.body.appendChild(script);
 
 // Event Listeners
-captureButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const docType = button.getAttribute('data-doc-type');
-        capturePhoto(docType);
-    });
-});
-
+captureButton.addEventListener('click', capturePhoto);
 generatePdfButton.addEventListener('click', generatePDF);
 
 // Clear Cache
