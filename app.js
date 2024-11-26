@@ -169,8 +169,8 @@ function handleClientLoad() {
 
 function initClient() {
     gapi.client.init({
-        apiKey: 'YOUR_NEW_API_KEY', // 🔒 Replace with your new API Key
-        clientId: 'YOUR_NEW_CLIENT_ID.apps.googleusercontent.com', // 🔒 Replace with your new Client ID
+        apiKey: 'AIzaSyB8COLiaLe28iI3fIywRPCjqvModBqw5Cg', // 🔒 Replace with your new API Key
+        clientId: '284777244763-scvpc35rqbi5lo4mlfah63b389v3q8e0.apps.googleusercontent.com', // 🔒 Replace with your new Client ID
         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
         scope: 'https://www.googleapis.com/auth/drive.file'
     }).then(() => {
