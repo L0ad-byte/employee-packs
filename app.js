@@ -169,8 +169,8 @@ function handleClientLoad() {
 
 function initClient() {
     gapi.client.init({
-        apiKey: 'YOUR_API_KEY',
-        clientId: 'YOUR_CLIENT_ID',
+        apiKey: 'AIzaSyB8COLiaLe28iI3fIywRPCjqvModBqw5Cg',
+        clientId: '284777244763-scvpc35rqbi5lo4mlfah63b389v3q8e0.apps.googleusercontent.com',
         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
         scope: 'https://www.googleapis.com/auth/drive.file'
     }).then(() => {
