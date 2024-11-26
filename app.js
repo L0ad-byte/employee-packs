@@ -169,8 +169,8 @@ function handleClientLoad() {
 
 function initClient() {
     gapi.client.init({
-        apiKey: 'AIzaSyB8COLiaLe28iI3fIywRPCjqvModBqw5Cg',
-        clientId: '284777244763-scvpc35rqbi5lo4mlfah63b389v3q8e0.apps.googleusercontent.com',
+        apiKey: 'AIzaSyB8COLiaLe28iI3fIywRPCjqvModBqw5Cg', // 🔒 Replace with your new API Key
+        clientId: '284777244763-scvpc35rqbi5lo4mlfah63b389v3q8e0.apps.googleusercontent.com', // 🔒 Replace with your new Client ID
         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
         scope: 'https://www.googleapis.com/auth/drive.file'
     }).then(() => {
@@ -180,7 +180,7 @@ function initClient() {
         }
     }).catch(err => {
         console.error('Error initializing Google API client:', err);
-        alert('Error initializing Google API client: ' + err.message);
+        alert('Error initializing Google API client: ' + JSON.stringify(err));
     });
 }
 
@@ -255,10 +255,12 @@ function b64toBlob(b64Data, contentType='', sliceSize=512) {
 
 // Initialize Google API
 // Load the Google API script
-const script = document.createElement('script');
-script.src = "https://apis.google.com/js/api.js";
-script.onload = handleClientLoad;
-document.body.appendChild(script);
+// Note: This script is already included in index.html via <script src="https://apis.google.com/js/api.js"></script>
+
+// Initialize the client after the script is loaded
+window.addEventListener('load', () => {
+    handleClientLoad();
+});
 
 // Event Listeners
 captureButton.addEventListener('click', capturePhoto);
